@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: out-cluster
+  labels:
+    app: out-cluster
+spec:
+  containers:
+    - name: out-cluster
+      image: naeem4265/api-server:1.0.6
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8080

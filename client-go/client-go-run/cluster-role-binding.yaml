@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: pod-lister
+subjects:
+- kind: ServiceAccount
+  namespace: default
+  name: default  # Name is case sensitive
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: pod-lister
+  apiGroup: rbac.authorization.k8s.io

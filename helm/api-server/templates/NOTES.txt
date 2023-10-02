@@ -1,0 +1,1 @@
+kubectl --namespace {{ .Values.namespace}} port-forward service/{{ .Values.containerSpec.name }} 8080:8080

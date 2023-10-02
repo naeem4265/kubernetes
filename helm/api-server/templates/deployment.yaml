@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaSpec.replicas }}
+  selector:
+    matchLabels:
+      {{- range $key,$value := .Values.replicaSpec.matchLabels }}
+      {{ $key }}: {{ $value }}
+      {{- end }}
+  template:
+    metadata:
+      labels:
+        {{- range $key,$value := .Values.replicaSpec.matchLabels }}
+        {{ $key }}: {{ $value }}
+        {{- end }}
+    spec:
+      containers:
+        - name: {{ .Values.containerSpec.name }}
+          image: {{ .Values.containerSpec.image }}:{{ .Values.containerSpec.tag }}
+          ports:
+            - containerPort: {{ .Values.containerSpec.port }}

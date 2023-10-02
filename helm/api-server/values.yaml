@@ -1,0 +1,17 @@
+namespace: default
+containerSpec:
+  name: api-server
+  image: naeem4265/api-server
+  tag: 1.0.7
+  port: 8080
+
+service:
+  type: NodePort
+  port: 8080
+  protocol: TCP
+
+replicaSpec:
+  replicas: 1
+  matchLabels:
+    app: api-server
+    cluster: kind
