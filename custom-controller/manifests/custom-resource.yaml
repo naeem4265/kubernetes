@@ -1,0 +1,12 @@
+apiVersion: naeem4265.com/v1
+kind: Book
+metadata:
+  name: example-book
+spec:
+  name: "My Book"
+  replicas: 3
+  container:
+    image: "my-book-image"
+    port: 8080
+status:
+  availableReplicas: 2

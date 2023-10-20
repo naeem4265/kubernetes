@@ -1,0 +1,48 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: crontabs.stable.example.com
+spec:
+  group: stable.example.com
+  names:
+    plural: crontabs
+    singular: crontab
+    kind: CronTab
+    shortNames:
+      - ct
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      subresources:
+        status:
+      schema:
+        # openAPIV3Schema is the schema for validating custom objects.
+        openAPIV3Schema:
+          type: object
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              x-kubernetes-validations:
+                - rule: "self.minReplicas <= self.replicas"
+                  message: "replicas should be greater than or equal to minReplicas."
+                - rule: "self.replicas <= self.maxReplicas"
+                  message: "replicas should be smaller than or equal to maxReplicas."
+              properties:
+                minReplicas:
+                  type: integer
+                replicas:
+                  type: integer
+                maxReplicas:
+                  type: integer
+              required:
+                - minReplicas
+                - replicas
+                - maxReplicas
