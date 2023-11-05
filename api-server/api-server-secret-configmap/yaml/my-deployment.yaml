@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-container
+          image: naeem4265/api-server:1.0.8
+          env:
+            - name: APISERVER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: apiserver-secret
+                  key: username
+            - name: APISERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: apiserver-secret
+                  key: password
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: apiserver-configmap
+                  key: port
