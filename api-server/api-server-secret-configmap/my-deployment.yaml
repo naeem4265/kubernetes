@@ -14,25 +14,25 @@ spec:
     spec:
       containers:
         - name: my-container
-          image: naeem4265/api-server:1.0.8
-          env:
-            - name: APISERVER_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: apiserver-secret
-                  key: username
-            - name: APISERVER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: apiserver-secret
-                  key: password
+          image: naeem4265/api-server:1.0.9
+          imagePullPolicy: Always
           volumeMounts:
+            - name: my-users
+              mountPath: "/users"
             - name: my-config
               mountPath: "/config"
+            - name: my-pvc
+              mountPath: "/pvc"
       volumes:
+        - name: my-users
+          secret:
+            secretName: apiserver-secret
         - name: my-config
           configMap:
             name: apiserver-configmap
             items:
               - key: "listenPort.config"
                 path: "listenPort.config"
+        - name: my-pvc
+          persistentVolumeClaim:
+            claimName: my-local-pvc

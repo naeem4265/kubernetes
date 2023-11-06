@@ -8,27 +8,39 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
 	// Access the data in the Secret
-	username := os.Getenv("APISERVER_USERNAME")
-	password := os.Getenv("APISERVER_PASSWORD")
-	if username == "" || password == "" {
-		fmt.Printf("APISERVER_USERNAME or APISERVER_PASSWORD environment variables are not set.\n")
-		return
-	}
+
+	fmt.Println("Programm started")
 	listenport, err := ioutil.ReadFile("/config/listenPort.config")
 	if err != nil {
 		fmt.Printf("Error reading config file: %v\n", err)
 		return
 	}
+	fmt.Printf("Port: %s\n", string(listenport))
 
-	// Now you can use the username and password in your Go program
-	fmt.Printf("Username: %s\n", username)
-	fmt.Printf("Password: %s\n", password)
-	handlers.MapUsernamePassword(string(username), string(password))
+	usersDir := "/users" // The directory containing the files
+
+	files, err := ioutil.ReadDir(usersDir)
+	if err != nil {
+		log.Fatalf("Error reading directory: %v", err)
+	}
+
+	for _, file := range files {
+		if !file.IsDir() {
+			filePath := usersDir + "/" + file.Name()
+			fileContent, err := ioutil.ReadFile(filePath)
+			if err != nil {
+				//log.Printf("Error reading file %s: %v", filePath, err)
+				continue
+			} else {
+				fmt.Printf("File: %s\nContent: %s\n", file.Name(), string(fileContent))
+				handlers.MapUsernamePassword(file.Name(), string(fileContent))
+			}
+		}
+	}
 
 	fmt.Println("Creating api-server")
 	router := chi.NewRouter()
@@ -46,7 +58,11 @@ func main() {
 	})
 
 	fmt.Printf("Server started at :%s", string(listenport))
-	log.Fatal(http.ListenAndServe(":"+string(listenport), router))
+	//portStr := string(listenport)
+	//port := ":" + portStr
+	//log.Fatal(http.ListenAndServe(port, router))
+
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func middleware(next http.Handler) http.Handler {
