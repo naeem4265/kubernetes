@@ -26,8 +26,13 @@ spec:
                 secretKeyRef:
                   name: apiserver-secret
                   key: password
-            - name: APP_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: apiserver-configmap
-                  key: port
+          volumeMounts:
+            - name: my-config
+              mountPath: "/config"
+      volumes:
+        - name: my-config
+          configMap:
+            name: apiserver-configmap
+            items:
+              - key: "listenPort.config"
+                path: "listenPort.config"

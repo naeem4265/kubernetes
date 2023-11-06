@@ -1,60 +1,32 @@
 package main
 
 import (
-	"context"
-	"flag"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/naeem4265/api-server/handlers"
-	"k8s.io/client-go/util/homedir"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"path/filepath"
-
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/tools/clientcmd"
+	"os"
 )
 
 func main() {
-	// Creating our cluster config
-	fmt.Println("Programm started")
-	var kubeconfig *string
-	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "Absolute path to the kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "", "Absolute path to the kubeconfig file")
-	}
-	flag.Parse()
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	if err != nil {
-		panic(err.Error())
-	}
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Println("Clientset created")
-	// Namespace where your Secret is located
-	namespace := "default"
-	secretName := "apiserver-secret" // Name of the Secret
-
-	// Retrieve the Secret
-	secret, err := clientset.CoreV1().Secrets(namespace).Get(context.TODO(), secretName, metav1.GetOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-
 	// Access the data in the Secret
-	username, usernameExists := secret.Data["username"]
-	password, passwordExists := secret.Data["password"]
-
-	// Check if the environment variables are set
-	if !usernameExists || !passwordExists {
-		fmt.Println("Username or password not found in the Secret.")
+	username := os.Getenv("APISERVER_USERNAME")
+	password := os.Getenv("APISERVER_PASSWORD")
+	if username == "" || password == "" {
+		fmt.Printf("APISERVER_USERNAME or APISERVER_PASSWORD environment variables are not set.\n")
 		return
 	}
+	listenport, err := ioutil.ReadFile("/config/listenPort.config")
+	if err != nil {
+		fmt.Printf("Error reading config file: %v\n", err)
+		return
+	}
+	// Now you can use 'fileContent' in your application.
+	fmt.Printf("Config Content: %s\n", string(listenport))
+
 	// Now you can use the username and password in your Go program
 	fmt.Printf("Username: %s\n", username)
 	fmt.Printf("Password: %s\n", password)

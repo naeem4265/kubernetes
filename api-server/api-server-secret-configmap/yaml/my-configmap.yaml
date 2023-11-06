@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: apiserver-configmap
 data:
-  port: "8080"
+  listenPort.config: |
+    8080
