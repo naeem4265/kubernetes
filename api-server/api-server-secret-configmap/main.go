@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func main() {
@@ -58,11 +59,13 @@ func main() {
 	})
 
 	fmt.Printf("Server started at :%s", string(listenport))
-	//portStr := string(listenport)
-	//port := ":" + portStr
+	portStr := string(listenport)
+	port := ":" + portStr
+	port = strings.TrimSuffix(port, "\n")
+	fmt.Printf("port=%v,portStr=%v,listenport=%v", port, portStr, listenport)
 	//log.Fatal(http.ListenAndServe(port, router))
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(port, router))
 }
 
 func middleware(next http.Handler) http.Handler {
