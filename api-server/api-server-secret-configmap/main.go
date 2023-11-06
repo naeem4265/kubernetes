@@ -24,8 +24,6 @@ func main() {
 		fmt.Printf("Error reading config file: %v\n", err)
 		return
 	}
-	// Now you can use 'fileContent' in your application.
-	fmt.Printf("Config Content: %s\n", string(listenport))
 
 	// Now you can use the username and password in your Go program
 	fmt.Printf("Username: %s\n", username)
@@ -47,8 +45,8 @@ func main() {
 		r.Delete("/{id}", handlers.DeleteAlbum)
 	})
 
-	fmt.Println("Server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Printf("Server started at :%s", string(listenport))
+	log.Fatal(http.ListenAndServe(":"+string(listenport), router))
 }
 
 func middleware(next http.Handler) http.Handler {
