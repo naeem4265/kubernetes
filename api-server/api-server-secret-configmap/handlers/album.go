@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/naeem4265/api-server/data"
 	"net/http"
@@ -18,7 +19,7 @@ func GetAlbums(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostAlbum(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Println("Post request came:")
 	var temp data.Book
 	if err := json.NewDecoder(r.Body).Decode(&temp); err != nil {
 		w.WriteHeader(http.StatusBadRequest)

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"time"
@@ -28,6 +29,7 @@ type Claims struct {
 }
 
 func SignIn(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Signin request come:")
 	var creds Credentials
 	err := json.NewDecoder(r.Body).Decode(&creds)
 	if err != nil {
@@ -57,7 +59,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
+	fmt.Printf("Tocken created for signin request")
 	http.SetCookie(w, &http.Cookie{
 		Name:    "token",
 		Value:   tokenString,

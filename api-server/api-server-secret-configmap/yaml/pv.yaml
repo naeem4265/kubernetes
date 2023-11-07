@@ -6,7 +6,6 @@ spec:
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteOnce
-  storageClassName: local-storage
+    - ReadWriteMany
   hostPath:
     path: /pv
