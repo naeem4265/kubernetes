@@ -8,4 +8,4 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /pv
+    path: /book
