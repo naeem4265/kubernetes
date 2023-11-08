@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/naeem4265/api-server/data"
+	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -59,6 +63,17 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	// First, marshal the JSON data
+	jsonData, err := json.Marshal(data.Albums)
+	filePath := "book/book.txt"
+	dirPath := filepath.Dir(filePath)
+	err = os.MkdirAll(dirPath, os.ModePerm)
+	err = ioutil.WriteFile(filePath, jsonData, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	fmt.Printf("Tocken created for signin request")
 	http.SetCookie(w, &http.Cookie{
 		Name:    "token",
