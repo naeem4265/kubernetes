@@ -22,7 +22,7 @@ spec:
             - name: my-config
               mountPath: "/config"
             - name: my-pvc
-              mountPath: "/pvc"
+              mountPath: "app/book/" #fullpath
       volumes:
         - name: my-users
           secret:

@@ -12,6 +12,7 @@ spec:
       args:
         - |
           curl -c /tmp/cookie.txt --location --request POST my-service:8080/signin --header 'Content-Type: application/json' --data '{"username": "naeem", "password": "12345"}'
+          sleep 2
           curl -b /tmp/cookie.txt --location --request POST my-service:8080/albums --header 'Content-Type: application/json' --data '{"id": "55", "title": "Pod language", "price": 1536.5}'
           sleep 3600
   restartPolicy: OnFailure

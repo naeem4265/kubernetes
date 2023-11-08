@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/naeem4265/api-server/data"
 	"github.com/naeem4265/api-server/handlers"
 	"io/ioutil"
 	"log"
@@ -48,6 +50,10 @@ func main() {
 
 	router.Post("/signin", handlers.SignIn)
 	router.Get("/signout", handlers.SignOut)
+
+	content, err := ioutil.ReadFile("book/book.txt")
+	//fmt.Printf("Data get from pvc %v\n books: %s \n error: %v\n", content, string(content), err)
+	err = json.Unmarshal(content, &data.Albums)
 
 	router.Route("/albums", func(r chi.Router) {
 		r.Use(middleware)
