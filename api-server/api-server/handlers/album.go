@@ -2,9 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/naeem4265/api-server/data"
-	"net/http"
 )
 
 func GetAlbums(w http.ResponseWriter, r *http.Request) {
